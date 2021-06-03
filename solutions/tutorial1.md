@@ -72,3 +72,27 @@ forall Set x {
     }
 }
 ```
+
+# Challenge 4
+Keep 3 sets. For each set, represent `Set` as both a `Circle` and a `Square`.
+
+`.sub`
+```
+Set A
+Set B
+Set C
+```
+
+`.dsl`
+```typescript
+type Set
+```
+
+_With changes:_
+`.sty`
+```typescript
+forall Set x {
+    x.icon = Rectangle{}
+    x.icon2 = Square{}
+}
+```
