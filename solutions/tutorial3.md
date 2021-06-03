@@ -143,7 +143,7 @@ where u := subV(v,w); In(u, U); In(v, U); In(w, U){
 
 /**************Exercise 2: Scalar Multipilication(start)********/
 forall Scalar a {
-  --a.scalar = 5. /* fixed value scalar */
+  -- a.scalar = 5. /* example of setting a fixed value scalar, note that "--" indicates an inline comment */
   a.scalar = ?  /* randomized value decided by Penrose */
   ensure inRange(a.scalar, 2., 5.);
 }
