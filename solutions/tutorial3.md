@@ -1,25 +1,11 @@
 # Tutorial 3 Solutions
-`linearAlgebra.dsl`
-```typescript
-type VectorSpace
-type Vector
-type Scalar
-predicate In: Vector * VectorSpace V
-function addV: Vector * Vector -> Vector
-function subV: Vector * Vector -> Vector
-function scalarMult: Scalar * Vector -> Vector
-```
-
+## Task 1
 `vector.sty`
 ```typescript
-/* This is the complete code for the style program for the tutorial
- * that teaches functions in Penrose. 
- */
-
- /**************DO NOT TOUCH ZONE - START**************/
+/**************DO NOT TOUCH ZONE - START**************/
 /* here are some useful constants that we use to draw
  * the vector space 
- */
+*/
 const { 
   scalar vectorSpaceSize = 350.0
   scalar arrowheadSize = 0.7
@@ -81,13 +67,8 @@ forall VectorSpace U {
 /**************YOUR CODE - START********************/
 forall Vector u; VectorSpace U
 where In(u,U) {
-  u.text = Text {
-    string : u.label
-    color : u.shape.color
-  }
-
   u.vector = (?, ?)
-  
+
   u.shape = Arrow {
     start: U.origin
     end : U.origin + u.vector
@@ -96,7 +77,64 @@ where In(u,U) {
     arrowheadSize : const.arrowheadSize
   }
 
-  u.vector = u.shape.end - u.shape.start
+  u.text = Text {
+    string : u.label
+    color : u.shape.color
+  }
+
+  ensure contains(U.background, u.shape)
+  ensure contains(U.background, u.text)
+  ensure atDist(u.shape, u.text, 15.0)
+  ensure minSize(u.shape)
+
+  layer u.text above U.xAxis
+  layer u.text above U.yAxis
+}
+/**************YOUR CODE - END**********************/
+```
+## Task 2
+
+`linearAlgebra.dsl`
+```typescript
+type VectorSpace
+type Vector
+type Scalar
+predicate In: Vector * VectorSpace V
+function addV: Vector * Vector -> Vector
+```
+
+`vector.sub`
+```typescript
+VectorSpace U
+Vector v 
+Vector w
+In(v, U)
+In(w, U)
+Vector u := addV(v, w)
+In(u, U)
+AutoLabel All
+```
+
+`vector.sty`
+```typescript
+/* ... same as starter code */
+/**************DO NOT TOUCH ZONE - END**************/
+
+/**************YOUR CODE - START********************/
+forall Vector u; VectorSpace U
+where In(u,U) {
+  u.text = Text {
+    string : u.label
+    color : u.shape.color
+  }
+  
+  u.shape = Arrow {
+    start: U.origin
+    end : U.origin + u.vector
+    thickness : 3.0
+    color : const.lightBlue
+    arrowheadSize : const.arrowheadSize
+  }
 
   ensure contains(U.background, u.shape)
   ensure contains(U.background, u.text)
@@ -107,6 +145,123 @@ where In(u,U) {
   layer u.text above U.yAxis
 }
 
+-- Tutorial Part 2 Changes:
+forall Vector u; Vector v; Vector w; VectorSpace U
+where u := addV(v,w); In(u, U); In(v, U); In(w, U) {
+  override u.shape.end = v.shape.end + w.shape.end - U.origin
+}
+/**************YOUR CODE - END**********************************/
+```
+
+## Exercise 1
+`linearAlgebra.dsl`
+```typescript
+type VectorSpace
+type Vector
+type Scalar
+predicate In: Vector * VectorSpace V
+function subV: Vector * Vector -> Vector
+```
+
+`vector.sub`
+```typescript
+VectorSpace U
+Vector v 
+Vector w
+In(v, U)
+In(w, U)
+Vector u := subV(v, w)
+In(u, U)
+AutoLabel All
+```
+
+`vector.sty`
+```typescript
+/**************YOUR CODE - START********************/
+forall Vector u; VectorSpace U
+where In(u,U) {
+ /* ...concatenated, this is the same as Tutorial Part 1 */
+}
+
+-- Exercise 1 Changes:
+forall Vector u; Vector v; Vector w; VectorSpace U
+where u := subV(v,w); In(u, U); In(v, U); In(w, U){
+  override u.shape.end = v.shape.end - w.shape.end - U.origin
+}
+/**************YOUR CODE - END**********************************/
+```
+
+## Exercise 2
+`linearAlgebra.dsl`
+```typescript
+type VectorSpace
+type Vector
+type Scalar
+predicate In: Vector * VectorSpace V
+function scalarMult: Scalar * Vector -> Vector
+```
+
+`vector.sub`
+```typescript
+VectorSpace U
+Vector v 
+In(v, U)
+Scalar a;
+Vector u := scalarMult(a, v)
+In(u, U)
+AutoLabel All
+```
+
+`vector.sty`
+```typescript
+/**************YOUR CODE - START********************/
+forall Vector u; VectorSpace U
+where In(u,U) {
+ /* ...concatenated, this is the same as Tutorial Part 1 */
+}
+
+-- Exercise 2 Changes:
+forall Scalar a {
+  -- a.scalar = 5. /* example of setting a fixed value scalar, note that "--" indicates an inline comment */
+  a.scalar = ?  /* randomized value decided by Penrose */
+  ensure inRange(a.scalar, 2., 5.);
+}
+
+forall Scalar a; Vector u; Vector v; VectorSpace U
+where u := scalarMult(a, v); In(u, U); In(v, U){
+   override u.shape.end = (a.scalar * v.shape.end) - U.origin 
+}
+/**************YOUR CODE - END**********************************/
+```
+## Exercise 3
+`linearAlgebra.dsl`
+```typescript
+/* This is the same as Tutorial Part 2 */
+type VectorSpace
+type Vector
+type Scalar
+predicate In: Vector * VectorSpace V
+function addV: Vector * Vector -> Vector
+```
+
+`vector.sub`
+```typescript
+/* This is the same as Tutorial Part 2 */
+VectorSpace U
+Vector v 
+Vector w
+In(v, U)
+In(w, U)
+Vector u := addV(v, w)
+In(u, U)
+AutoLabel All
+```
+
+`vector.sty`
+```typescript
+where In(u,U) {
+ /* ...concatenated, this is the same as Tutorial Part 1 */
+}
 
 forall Vector u; Vector v; Vector w; VectorSpace U
 where u := addV(v,w); In(u, U); In(v, U); In(w, U) {
@@ -133,60 +288,4 @@ where u := addV(v,w); In(u, U); In(v, U); In(w, U) {
   u.dashed_v below u.shape
   /************Exercise 3: Parallelogram(end)*******************/
 }
-
-/**************Exercise 1: Vector Subtraction(start)************/
-forall Vector u; Vector v; Vector w; VectorSpace U
-where u := subV(v,w); In(u, U); In(v, U); In(w, U){
-  override u.shape.end = v.shape.end - w.shape.end - U.origin
-}
-/**************Exercise 1: Vector Subtraction(end)**************/
-
-/**************Exercise 2: Scalar Multipilication(start)********/
-forall Scalar a {
-  -- a.scalar = 5. /* example of setting a fixed value scalar, note that "--" indicates an inline comment */
-  a.scalar = ?  /* randomized value decided by Penrose */
-  ensure inRange(a.scalar, 2., 5.);
-}
-
-forall Scalar a; forall Vector u; Vector v; VectorSpace U
-where u := scalarMult(a, v); In(u, U); In(v, U){
-   override u.shape.end = (a.scalar * v.shape.end) - U.origin 
-}
-/**************Exercise 2: Scalar Multipilication(end)**********/
-/**************YOUR CODE - END**********************************/
-```
-
-## Exercise 1
-```typescript
-VectorSpace U
-Vector v 
-Vector w
-In(v, U)
-In(w, U)
-Vector u := subV(v, w)
-In(u, U)
-AutoLabel All
-```
-## Exercise 2
-```typescript
-VectorSpace U
-Vector v 
-In(v, U)
-Scalar a;
-Vector u := scalarMult(a, v)
-In(u, U)
-AutoLabel All
-```
-
-## Exercise 3
-```typescript
-/* same as tutorial code */
-VectorSpace U
-Vector v 
-Vector w
-In(v, U)
-In(w, U)
-Vector u := addV(v, w)
-In(u, U)
-AutoLabel All
 ```
