@@ -29,6 +29,20 @@ The substance file contains the lines for putting two vectors in the same vector
 The style file is a bit more involved, therefore we provide a very detailed step through of the code. __Again, feel free to [skip to the example](https://github.com/penrose/penrose/blob/docs-edit/tutorial/tutorial-p3.md#page_facing_up-domain) if you feel confident reading and comprehending the code by yourself__.
 
 On the very top of the file, you see this block of code. 
+
+```typescript
+canvas {
+  width = 800
+  height = 700
+}
+```
+
+`canvas.width` and `canvas.height` are special properties to specify the size of the output SVG file
+that the Penrose diagram is rendered in. These values can be used to constrain other parts of your
+diagram as well, for example if you want a shape to take up exactly half the width of the canvas.
+
+Next comes a `const` namespace.
+
 ```typescript
 const { 
   scalar vectorSpaceSize = 350.0
@@ -41,7 +55,10 @@ const {
   color none = rgba(0., 0., 0., 0.)
 }
 ```
-This is helpful way and a good practice to organize your constants in an object. Here we have some constants that helps with drawing out the vector space. Feel free to add more useful constants in here for your explorations. Also note how penrose has built-in `scalar` and `color` types for `.sty` programs for your readability. 
+There's nothing special about the name `const`, but using a namespace is good practice for
+organizing your constants in Style programs. Here we have some constants that helps with drawing out the vector
+space. Feel free to add more useful constants in here for your explorations. Also note how penrose
+has built-in `scalar` and `color` types for `.sty` programs for your readability. 
 
 The real fun starts! 🥁 To draw a vector space, we have a background, an origin, x-axis and y-aixs. 
 

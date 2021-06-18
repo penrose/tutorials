@@ -16,6 +16,11 @@ Intersecting(A, B)
 
 `.sty`
 ```typescript
+canvas {
+  width = 800
+  height = 700
+}
+
 forall Set x {
     x.icon = Circle {
         strokeWidth : 0.0
@@ -48,6 +53,11 @@ NotIntersecting(A, B)
 
 `.sty`
 ```typescript
+canvas {
+  width = 800
+  height = 700
+}
+
 forall Set x {
     x.icon = Circle {
         strokeWidth : 0.0

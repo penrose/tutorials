@@ -8,6 +8,11 @@ type Set
 
 `.sty`
 ```typescript
+canvas {
+  width = 800
+  height = 700
+}
+
 forall Set x {
     x.icon = Circle {
         strokeWidth : 0.0
@@ -41,6 +46,11 @@ type Set
 _With changes:_
 `.sty`
 ```typescript
+canvas {
+  width = 800
+  height = 700
+}
+
 forall Set x {
     x.icon = Square {
         side : 50.0
@@ -66,6 +76,11 @@ type Set
 _With changes:_
 `.sty`
 ```typescript
+canvas {
+  width = 800
+  height = 700
+}
+
 forall Set x {
     x.icon = Rectangle {
         strokeWidth : 15.0
@@ -91,6 +106,11 @@ type Set
 _With changes:_
 `.sty`
 ```typescript
+canvas {
+  width = 800
+  height = 700
+}
+
 forall Set x {
     x.icon = Rectangle{}
     x.icon2 = Square{}
