@@ -42,13 +42,14 @@ Define a predicate that is the opposite of Intersecting that takes in two sets, 
 ```typescript
 type Set
 predicate Intersecting : Set s1 * Set s2
+predicate Not : Prop p1
 ```
 
 `.sub`
 ```
 Set A
 Set B
-NotIntersecting(A, B)
+Not(Intersecting(A, B))
 ```
 
 `.sty`
