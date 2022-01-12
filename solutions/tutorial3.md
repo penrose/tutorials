@@ -32,41 +32,43 @@ forall VectorSpace U {
     vec2 o = U.origin /* just so we don't need to type U.origin everytime */
     U.axisColor = const.gray
 
-    U.background = Square {
+    U.background = Rectangle {
         center : U.origin
         side : const.vectorSpaceSize
-        color : const.lightGray
+        fillColor : const.lightGray
         strokeColor : const.none
     }
+    ensure equal(U.background.width, U.background.height)
 
     U.xAxis = Line {
         start : (o[0] - axisSize, o[1]) 
         end : (o[0] + axisSize, o[1])
-        thickness : const.lineThickness
+        strokeWidth : const.lineThickness
         style : "solid"
-        color : U.axisColor
-        leftArrowhead: true
-        rightArrowhead: true
+        strokeColor : U.axisColor
+        startArrowhead: true
+        endArrowhead: true
         arrowheadSize : const.arrowheadSize * 2.
     }
 
     U.yAxis = Line {
-           start : (o[0], o[1] - axisSize)
-             end : (o[0], o[1] + axisSize)
-       thickness : const.lineThickness
-           style : "solid"
-           color : U.axisColor
-           leftArrowhead: true
-           rightArrowhead: true
+        start : (o[0], o[1] - axisSize)
+        end : (o[0], o[1] + axisSize)
+        strokeWidth : const.lineThickness
+        style : "solid"
+        strokeColor : U.axisColor
+        startArrowhead: true
+        endArrowhead: true
         arrowheadSize : const.arrowheadSize * 2.
     }
 
     U.text = Text {
         string : U.label
         center : (U.origin[0] - axisSize, U.origin[1] + axisSize)
-        color : U.axisColor
+        fillColor : U.axisColor
     }
 }
+
 /**************DO NOT TOUCH ZONE - END**************/
 
 /**************YOUR CODE - START********************/
@@ -77,14 +79,14 @@ where In(u,U) {
   u.shape = Arrow {
     start: U.origin
     end : U.origin + u.vector
-    thickness : 3.0
-    color : const.lightBlue
+    strokeWidth : 3.0
+    strokeColor : const.lightBlue
     arrowheadSize : const.arrowheadSize
   }
 
   u.text = Text {
     string : u.label
-    color : u.shape.color
+    fillColor : u.shape.color
   }
 
   ensure contains(U.background, u.shape)
@@ -104,8 +106,8 @@ where In(u,U) {
 type VectorSpace
 type Vector
 type Scalar
-predicate In: Vector * VectorSpace V
-function addV: Vector * Vector -> Vector
+predicate In(Vector, VectorSpace V)
+function addV(Vector, Vector) -> Vector
 ```
 
 `vector.sub`
@@ -130,14 +132,14 @@ forall Vector u; VectorSpace U
 where In(u,U) {
   u.text = Text {
     string : u.label
-    color : u.shape.color
+    fillColor: u.shape.color
   }
   
   u.shape = Arrow {
     start: U.origin
     end : U.origin + u.vector
-    thickness : 3.0
-    color : const.lightBlue
+    strokeWidth : 3.0
+    strokeColor : const.lightBlue
     arrowheadSize : const.arrowheadSize
   }
 
@@ -164,8 +166,8 @@ where u := addV(v,w); In(u, U); In(v, U); In(w, U) {
 type VectorSpace
 type Vector
 type Scalar
-predicate In: Vector * VectorSpace V
-function subV: Vector * Vector -> Vector
+predicate In(Vector, VectorSpace V)
+function subV(Vector, Vector) -> Vector
 ```
 
 `vector.sub`
@@ -202,8 +204,8 @@ where u := subV(v,w); In(u, U); In(v, U); In(w, U){
 type VectorSpace
 type Vector
 type Scalar
-predicate In: Vector * VectorSpace V
-function scalarMult: Scalar * Vector -> Vector
+predicate In(Vector, VectorSpace V)
+function scalarMult(Scalar, Vector) -> Vector
 ```
 
 `vector.sub`
@@ -211,7 +213,7 @@ function scalarMult: Scalar * Vector -> Vector
 VectorSpace U
 Vector v 
 In(v, U)
-Scalar a;
+Scalar a
 Vector u := scalarMult(a, v)
 In(u, U)
 AutoLabel All
@@ -229,7 +231,7 @@ where In(u,U) {
 forall Scalar a {
   -- a.scalar = 5. /* example of setting a fixed value scalar, note that "--" indicates an inline comment */
   a.scalar = ?  /* randomized value decided by Penrose */
-  ensure inRange(a.scalar, 2., 5.);
+  ensure inRange(a.scalar, 2., 5.)
 }
 
 forall Scalar a; Vector u; Vector v; VectorSpace U
@@ -245,8 +247,8 @@ where u := scalarMult(a, v); In(u, U); In(v, U){
 type VectorSpace
 type Vector
 type Scalar
-predicate In: Vector * VectorSpace V
-function addV: Vector * Vector -> Vector
+predicate In(Vector, VectorSpace V)
+function addV(Vector, Vector) -> Vector
 ```
 
 `vector.sub`
@@ -273,19 +275,21 @@ where u := addV(v,w); In(u, U); In(v, U); In(w, U) {
   override u.shape.end = v.shape.end + w.shape.end - U.origin
 
   /************Exercise 3: Parallelogram(start)*****************/
-  u.dashed_v = Arrow {
+  u.dashed_v = Line {
     start: (w.shape.end[0], w.shape.end[1])
     end: (u.shape.end[0], u.shape.end[1])
-    thickness : const.arrowThickness
-    style : "dashed"
+    endArrowhead: true
+    strokeWidth : const.arrowThickness
+    strokeStyle : "dashed"
     arrowheadSize : const.arrowheadSize
   }
 
-  u.dashed_w = Arrow {
+  u.dashed_w = Line {
     start: (v.shape.end[0], v.shape.end[1])
     end: (u.shape.end[0], u.shape.end[1])
-    thickness : const.arrowThickness
-    style : "dashed"
+    endArrowhead: true
+    strokeWidth : const.arrowThickness
+    strokeStyle : "dashed"
     arrowheadSize : const.arrowheadSize
   }
 
