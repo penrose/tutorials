@@ -4,7 +4,7 @@ Define a predicate `Intersecting` that takes in two sets, and outputs 2 circles 
 `.dsl`
 ```typescript
 type Set
-predicate Intersecting : Set s1 * Set s2
+predicate Intersecting : (Set s1, Set s2)
 ```
 
 `.sub`
@@ -25,13 +25,13 @@ forall Set x {
     x.icon = Circle {
         strokeWidth : 0.0
     }
-    ensure minSize(x.icon)
-    ensure maxSize(x.icon)
+    ensure minSize(x.icon, 50)
+    ensure maxSize(x.icon, 300)
 }
 
 forall Set x; Set y
 where Intersecting(x, y) {
-    ensure overlapping(x.icon, y.icon)
+    ensure overlapping(x.icon, y.icon, -15)
 }
 ```
 
@@ -41,7 +41,7 @@ Define a predicate that is the opposite of Intersecting that takes in two sets, 
 `.dsl`
 ```typescript
 type Set
-predicate Intersecting : Set s1 * Set s2
+predicate NotIntersecting(Set s1, Set s2)
 ```
 
 `.sub`
@@ -62,13 +62,13 @@ forall Set x {
     x.icon = Circle {
         strokeWidth : 0.0
     }
-    ensure minSize(x.icon)
-    ensure maxSize(x.icon)
+    ensure minSize(x.icon, 50)
+    ensure maxSize(x.icon, 400)
 }
 
 forall Set x; Set y
-where Not(Intersecting(x, y)) {
-    ensure disjoint(x.icon, y.icon)
+where NotIntersecting(x, y) {
+    ensure disjoint(x.icon, y.icon, 15)
 }
 
 ```
