@@ -1,10 +1,10 @@
-# Challenge 1: 
-Define a predicate `Intersecting` that takes in two sets, and outputs 2 circles that overlap.
+# Challenge 1:
+Define a predicate `Intersecting` that takes in two sets and outputs 2 circles that overlap.
 
 `.dsl`
-```typescript
+```
 type Set
-predicate Intersecting : (Set s1, Set s2)
+predicate Intersecting(Set s1, Set s2)
 ```
 
 `.sub`
@@ -15,7 +15,7 @@ Intersecting(A, B)
 ```
 
 `.sty`
-```typescript
+```
 canvas {
   width = 800
   height = 700
@@ -36,10 +36,10 @@ where Intersecting(x, y) {
 ```
 
 # Challenge 2:
-Define a predicate that is the opposite of Intersecting that takes in two sets, and outputs 2 circles that are disjoint.
+Define a predicate that takes in two sets and outputs 2 circles that are disjoint.
 
 `.dsl`
-```typescript
+```
 type Set
 predicate NotIntersecting(Set s1, Set s2)
 ```
@@ -52,7 +52,7 @@ NotIntersecting(A, B)
 ```
 
 `.sty`
-```typescript
+```
 canvas {
   width = 800
   height = 700
@@ -70,5 +70,4 @@ forall Set x; Set y
 where NotIntersecting(x, y) {
     ensure disjoint(x.icon, y.icon, 15)
 }
-
 ```
