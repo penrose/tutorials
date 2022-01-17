@@ -1,17 +1,17 @@
 # Tutorial 3 Solutions
 ## Task 1
 `vector.sty`
-```typescript
+```
 /**************DO NOT TOUCH ZONE - START**************/
 /* here are some useful constants that we use to draw
- * the vector space 
-*/
+ * the vector space
+ */
 canvas {
   width = 800
   height = 700
 }
 
-const { 
+const {
   scalar vectorSpaceSize = 350.0
   scalar arrowheadSize = 0.7
   scalar lineThickness = 1.
@@ -19,29 +19,30 @@ const {
   color gray = rgba(0.6, 0.6, 0.6, 1.)
   color lightBlue = rgba(0.2, 0.4, 0.8, 1.0)
   color lightGray = rgba(252, 252, 252, 0.015)
+  color green = rgba(0., 0.8, 0., 1.)
   color none = rgba(0., 0., 0., 0.)
 }
 
 /* here we draw a vector space by defining an origin
- * of the vector space, and x-axis, y-axis that are 
- * centered at the origin 
+ * of the vector space, and x-axis, y-axis that are
+ * centered at the origin
  */
-forall VectorSpace U { 
-    scalar axisSize = const.vectorSpaceSize / 2.0 
+forall VectorSpace U {
+    scalar axisSize = const.vectorSpaceSize / 2.0
     vec2 U.origin = (0., 0.)
     vec2 o = U.origin /* just so we don't need to type U.origin everytime */
     U.axisColor = const.gray
 
     U.background = Rectangle {
         center : U.origin
-        side : const.vectorSpaceSize
+        width : const.vectorSpaceSize
+        height : const.vectorSpaceSize
         fillColor : const.lightGray
         strokeColor : const.none
     }
-    ensure equal(U.background.width, U.background.height)
 
     U.xAxis = Line {
-        start : (o[0] - axisSize, o[1]) 
+        start : (o[0] - axisSize, o[1])
         end : (o[0] + axisSize, o[1])
         strokeWidth : const.lineThickness
         style : "solid"
@@ -62,13 +63,12 @@ forall VectorSpace U {
         arrowheadSize : const.arrowheadSize * 2.
     }
 
-    U.text = Text {
+    U.text = Equation {
         string : U.label
         center : (U.origin[0] - axisSize, U.origin[1] + axisSize)
         fillColor : U.axisColor
     }
 }
-
 /**************DO NOT TOUCH ZONE - END**************/
 
 /**************YOUR CODE - START********************/
@@ -76,17 +76,18 @@ forall Vector u; VectorSpace U
 where In(u,U) {
   u.vector = (?, ?)
 
-  u.shape = Arrow {
+  u.shape = Line {
     start: U.origin
     end : U.origin + u.vector
     strokeWidth : 3.0
     strokeColor : const.lightBlue
+    endArrowhead : true
     arrowheadSize : const.arrowheadSize
   }
 
-  u.text = Text {
+  u.text = Equation {
     string : u.label
-    fillColor : u.shape.color
+    fillColor : u.shape.strokeColor
   }
 
   ensure contains(U.background, u.shape)
@@ -101,8 +102,8 @@ where In(u,U) {
 ```
 ## Task 2
 
-`linearAlgebra.dsl`
-```typescript
+`linearAlgebra`
+```
 type VectorSpace
 type Vector
 type Scalar
@@ -111,9 +112,9 @@ function addV(Vector, Vector) -> Vector
 ```
 
 `vector.sub`
-```typescript
+```
 VectorSpace U
-Vector v 
+Vector v
 Vector w
 In(v, U)
 In(w, U)
@@ -123,24 +124,27 @@ AutoLabel All
 ```
 
 `vector.sty`
-```typescript
+```
 /* ... same as starter code */
 /**************DO NOT TOUCH ZONE - END**************/
 
 /**************YOUR CODE - START********************/
 forall Vector u; VectorSpace U
 where In(u,U) {
-  u.text = Text {
-    string : u.label
-    fillColor: u.shape.color
-  }
-  
-  u.shape = Arrow {
+  u.vector = (?, ?)
+
+  u.shape = Line {
     start: U.origin
     end : U.origin + u.vector
     strokeWidth : 3.0
     strokeColor : const.lightBlue
+    endArrowhead : true
     arrowheadSize : const.arrowheadSize
+  }
+
+  u.text = Equation {
+    string : u.label
+    fillColor : u.shape.strokeColor
   }
 
   ensure contains(U.background, u.shape)
@@ -162,7 +166,7 @@ where u := addV(v,w); In(u, U); In(v, U); In(w, U) {
 
 ## Exercise 1
 `linearAlgebra.dsl`
-```typescript
+```
 type VectorSpace
 type Vector
 type Scalar
@@ -171,9 +175,9 @@ function subV(Vector, Vector) -> Vector
 ```
 
 `vector.sub`
-```typescript
+```
 VectorSpace U
-Vector v 
+Vector v
 Vector w
 In(v, U)
 In(w, U)
@@ -183,7 +187,7 @@ AutoLabel All
 ```
 
 `vector.sty`
-```typescript
+```
 /**************YOUR CODE - START********************/
 forall Vector u; VectorSpace U
 where In(u,U) {
@@ -194,13 +198,15 @@ where In(u,U) {
 forall Vector u; Vector v; Vector w; VectorSpace U
 where u := subV(v,w); In(u, U); In(v, U); In(w, U){
   override u.shape.end = v.shape.end - w.shape.end - U.origin
+  override u.shape.strokeColor = const.green
+  override u.text.string = "difference"
 }
 /**************YOUR CODE - END**********************************/
 ```
 
 ## Exercise 2
 `linearAlgebra.dsl`
-```typescript
+```
 type VectorSpace
 type Vector
 type Scalar
@@ -209,9 +215,9 @@ function scalarMult(Scalar, Vector) -> Vector
 ```
 
 `vector.sub`
-```typescript
+```
 VectorSpace U
-Vector v 
+Vector v
 In(v, U)
 Scalar a
 Vector u := scalarMult(a, v)
@@ -220,7 +226,7 @@ AutoLabel All
 ```
 
 `vector.sty`
-```typescript
+```
 /**************YOUR CODE - START********************/
 forall Vector u; VectorSpace U
 where In(u,U) {
@@ -236,13 +242,15 @@ forall Scalar a {
 
 forall Scalar a; Vector u; Vector v; VectorSpace U
 where u := scalarMult(a, v); In(u, U); In(v, U){
-   override u.shape.end = (a.scalar * v.shape.end) - U.origin 
+   override u.shape.end = (a.scalar * v.shape.end) - U.origin
+   override u.shape.strokeColor = const.green
+  override u.text.string = "scaled_v"
 }
 /**************YOUR CODE - END**********************************/
 ```
 ## Exercise 3
 `linearAlgebra.dsl`
-```typescript
+```
 /* This is the same as Tutorial Part 2 */
 type VectorSpace
 type Vector
@@ -252,10 +260,10 @@ function addV(Vector, Vector) -> Vector
 ```
 
 `vector.sub`
-```typescript
+```
 /* This is the same as Tutorial Part 2 */
 VectorSpace U
-Vector v 
+Vector v
 Vector w
 In(v, U)
 In(w, U)
@@ -265,7 +273,7 @@ AutoLabel All
 ```
 
 `vector.sty`
-```typescript
+```
 where In(u,U) {
  /* ...concatenated, this is the same as Tutorial Part 1 */
 }
@@ -273,6 +281,8 @@ where In(u,U) {
 forall Vector u; Vector v; Vector w; VectorSpace U
 where u := addV(v,w); In(u, U); In(v, U); In(w, U) {
   override u.shape.end = v.shape.end + w.shape.end - U.origin
+  override u.shape.strokeColor = const.green
+  override u.text.string = "sum"
 
   /************Exercise 3: Parallelogram(start)*****************/
   u.dashed_v = Line {
