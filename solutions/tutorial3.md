@@ -244,7 +244,7 @@ forall Scalar a; Vector u; Vector v; VectorSpace U
 where u := scalarMult(a, v); In(u, U); In(v, U){
    override u.shape.end = (a.scalar * v.shape.end) - U.origin
    override u.shape.strokeColor = const.green
-  override u.text.string = "scaled_v"
+   override u.text.string = "scaled_v"
 }
 /**************YOUR CODE - END**********************************/
 ```
