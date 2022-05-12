@@ -1,3 +1,5 @@
+### ARCHIVED: see [penrose/penrose#959](https://github.com/penrose/penrose/pull/959)
+
 # Penrose Tutorials
 The tutorial can be found [here](https://penrose-saurus.netlify.app/docs/tutorial/welcome).
 
